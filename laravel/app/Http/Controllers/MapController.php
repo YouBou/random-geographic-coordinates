@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Usecase\GenerateCoordinatesUsecase;
 use Illuminate\Http\Request;
 
 class MapController extends Controller
@@ -13,14 +14,14 @@ class MapController extends Controller
         ]);
     }
 
-    public function generateCoordinates()
-    {
-        $latitude = rand(-90 * 10000, 90 * 10000) / 10000;
-        $longitude = rand(-180 * 10000, 180 * 10000) / 10000;
+    public function generateCoordinates(
+        GenerateCoordinatesUsecase $usecase,
+    ) {
+        $output = $usecase->execute();
         
         return response()->json([
-            'lat' => $latitude,
-            'lng' => $longitude
+            'lat' => $output->getLatitude(),
+            'lng' => $output->getLongitude(),
         ]);
     }
 }
